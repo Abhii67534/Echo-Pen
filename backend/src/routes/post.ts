@@ -169,6 +169,8 @@ postRouter.get('/bulk', async (c) => {
 
 postRouter.post('/blog/:id/like', async (c) => {
     const postId = c.req.param('id'); // Get post ID from the URL
+    console.log("IDDDDD ",postId);
+    
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
@@ -183,7 +185,8 @@ postRouter.post('/blog/:id/like', async (c) => {
                 },
             },
         });
-
+        console.log(updatedPost);
+        
         return c.json(updatedPost); // Return the updated post
     } catch (error) {
         console.error("Error liking post:", error);

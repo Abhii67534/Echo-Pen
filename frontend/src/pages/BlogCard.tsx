@@ -1,3 +1,6 @@
+import axios from "axios";
+import { useState } from "react";
+
 export interface BlogObject {
     author: {
         name: string;
@@ -9,16 +12,48 @@ export interface BlogObject {
     content: string;
     avatar:string;
     likes:number
+    date:string
 }
 
-export const BlogCard = ({ id, title, content,avatar,likes, author }: BlogObject) => {
-
+export const BlogCard = ({ id, title, content,avatar,likes,date, author }: BlogObject) => {
+    const [like, setLike] = useState(likes);
     function capitalizeFirstLetter(str: string): string {
         if (!str) return '';
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
-
-
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString); // Convert to Date object
+        const options: Intl.DateTimeFormatOptions = {
+            month: 'long', // Use 'long' to get full month names
+            day: 'numeric', // Use 'numeric' to get day of the month
+        };
+        return date.toLocaleDateString(undefined, options); // Format date
+    };
+    const formattedDate = formatDate(date);
+    const handleLikes = async () => {
+        try {
+            const blogid = id; // Use the current blog ID
+            console.log(blogid);
+            
+            const token = localStorage.getItem('token');
+            
+            // Increment likes locally using the previous state
+            setLike(prevLikes => prevLikes + 1); // Increment likes by 1
+    
+            // Update likes in the database
+            await axios.post(`https://backend.abhisharma4950.workers.dev/post/blog/${blogid}/like`, {}, {
+                headers: {
+                    Authorization: token, // Include token in Authorization header
+                    'Content-Type': 'application/json',
+                },
+            });
+        } catch (error) {
+            console.error("Error updating likes:", error);
+            // Optionally, revert the local likes increment if the update fails
+            setLike(prevLikes => prevLikes - 1); // Reset to previous count on error
+        }
+    };
+    
     return (
         <div className="w-[700px] pb-6 pt-5 ml-5 border-t-2 border-gray-500">
             <div className="flex flex-row items-center mb-4">
@@ -46,12 +81,15 @@ export const BlogCard = ({ id, title, content,avatar,likes, author }: BlogObject
                     <div className="mt-3 flex items-center">
                         <div className="flex items-center">
                             <img className="w-[15px] h-[15px]" src="./src/images/calendar.png" />
-                            <div className="text-sm ml-2">May 24</div>
+                            <div className="text-sm ml-2">{formattedDate}</div>
                         </div>
 
                         <div className="ml-3 flex items-center">
+                            <button onClick={handleLikes}>
                             <img className="w-[20px] h-[20px] mb-2" src="./src/images/like.png" />
-                            <div className="text-sm ml-2"> {likes} </div>
+                            </button>
+                            
+                            <div className="likes text-sm ml-2"> {like} </div>
                         </div>
                     </div>
                 </div>
