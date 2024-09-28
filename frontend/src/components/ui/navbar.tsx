@@ -1,12 +1,9 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom'; 
-import { Button } from './button';
+
 
 const Navbar = () => {
 
-    const handleClick = ()=>{
-        
-    }
     return (
         <nav className=" ml-10 text-black pt-4 pr-4 pr-0 pl-0 flex justify-between">
             <div className="container flex justify-between items-center">
