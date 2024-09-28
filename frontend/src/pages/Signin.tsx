@@ -70,7 +70,7 @@ export const Signin = () => {
             // console.log(token);
 
             // Redirect to the blog page
-            navigate("/signup");
+            navigate("/blog");
         }
         else {
             console.log("Error while signin user");
