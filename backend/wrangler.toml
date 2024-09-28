@@ -1,0 +1,13 @@
+name = "backend"
+compatibility_date = "2024-09-16"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+DATABASE_URL ="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZDUxNmEwZDEtMjdjYy00ZjIzLWEyYTMtYTAwYWE3Yzg0YzgyIiwidGVuYW50X2lkIjoiMDkyYmVlN2NkNTBmZjAzZWQzMDQ2ODk5OGFlOWY1MThjZjZkZDY5MGY2MjQwMDU5YTBmMjlmZDg1OTkyM2YxZiIsImludGVybmFsX3NlY3JldCI6Ijc2MjIxYmU5LTQxMjctNDgzZi1iMzAwLThlOTQ4MTViNGZjNCJ9.yToGIzRcVMhIBvCmPUe1iGNsqjh6xHzxG_MRG4HM8jU"
+JWT_SECRET = "Abhishek"
+
+[[r2_buckets]]
+binding='HONO_R2_UPLOAD'
+bucket_name = 'images-echopen'
+
+
