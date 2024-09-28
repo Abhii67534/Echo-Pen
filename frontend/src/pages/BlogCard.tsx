@@ -80,13 +80,13 @@ export const BlogCard = ({ id, title, content,avatar,likes,date, author }: BlogO
                     {/* Date and Like Section */}
                     <div className="mt-3 flex items-center">
                         <div className="flex items-center">
-                            <img className="w-[15px] h-[15px]" src="./src/images/calendar.png" />
+                            <img className="w-[15px] h-[15px]" src="/images/calendar.png" />
                             <div className="text-sm ml-2">{formattedDate}</div>
                         </div>
 
                         <div className="ml-3 flex items-center">
                             <button onClick={handleLikes}>
-                            <img className="w-[20px] h-[20px] mb-2" src="./src/images/like.png" />
+                            <img className="w-[20px] h-[20px] mb-2" src="/images/like.png" />
                             </button>
                             
                             <div className="likes text-sm ml-2"> {like} </div>
