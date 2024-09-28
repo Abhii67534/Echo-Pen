@@ -63,6 +63,7 @@ export const Signup = () => {
 
             if (response.status === 200) {
                 console.log("User added to db");
+                localStorage.setItem('token',response.data.token)
                 navigate('/signin');
             } else {
                 console.log("Error while signing up user");

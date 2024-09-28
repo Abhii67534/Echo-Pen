@@ -7,10 +7,11 @@ export interface BlogObject {
     id: string;
     title: string;
     content: string;
-    avatar:string
+    avatar:string;
+    likes:number
 }
 
-export const BlogCard = ({ id, title, content,avatar, author }: BlogObject) => {
+export const BlogCard = ({ id, title, content,avatar,likes, author }: BlogObject) => {
 
     function capitalizeFirstLetter(str: string): string {
         if (!str) return '';
@@ -19,7 +20,7 @@ export const BlogCard = ({ id, title, content,avatar, author }: BlogObject) => {
 
 
     return (
-        <div className="w-[700px] pb-6 pt-5 ml-5 border-t-2 border-b-2 border-gray-100">
+        <div className="w-[700px] pb-6 pt-5 ml-5 border-t-2 border-gray-500">
             <div className="flex flex-row items-center mb-4">
                 <div className="mr-3 relative inline-flex items-center justify-center w-6 h-6 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
                     {author.avatar ? (
@@ -50,7 +51,7 @@ export const BlogCard = ({ id, title, content,avatar, author }: BlogObject) => {
 
                         <div className="ml-3 flex items-center">
                             <img className="w-[20px] h-[20px] mb-2" src="./src/images/like.png" />
-                            <div className="text-sm ml-2"> 4.4 K </div>
+                            <div className="text-sm ml-2"> {likes} </div>
                         </div>
                     </div>
                 </div>

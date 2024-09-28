@@ -23,7 +23,7 @@ export const Signin = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get( "https://api.api-ninjas.com/v1/quotes?category=happiness", {
+                const response = await axios.get("https://api.api-ninjas.com/v1/quotes?category=happiness", {
                     headers: {
                         'X-Api-Key': 'Uc899KMmjxTGJ2vmiv7Tdg==1u9iHsIcFgGV4qlj'
                     }
@@ -38,29 +38,45 @@ export const Signin = () => {
         fetchData();
     }, []);
 
-const formData ={
-    email:email,
-    password:password
-}
-
-const handleClick = async () => {
-
-
-
-    const response = axios.post("https://backend.abhisharma4950.workers.dev/user/signin", formData);
-    if ((await response).status == 200) {
-
-        console.log("User signed in");
-        const token = (await response).data.token;
-        localStorage.setItem('token', token);
-        
-        navigate("/blog")
+    const formData = {
+        email: email,
+        password: password
     }
-    else {
-        console.log("Error while signup user");
 
+    const handleClick = async () => {
+
+
+
+        const response = await axios.post("https://backend.abhisharma4950.workers.dev/user/signin", formData,
+            {
+                withCredentials: true,
+            }
+        );
+        if (response.status === 200) {
+            console.log("API Response:", response.data);
+
+            console.log("User signed in");
+
+            // Get the token from the response data
+            const token = response.data.token;
+
+            console.log("Before setting token:", localStorage.getItem('token'));
+
+            // Store the token in localStorage
+            localStorage.setItem('token', token);
+
+            console.log("After setting token:", localStorage.getItem('token'));
+
+            // console.log(token);
+
+            // Redirect to the blog page
+            navigate("/signup");
+        }
+        else {
+            console.log("Error while signin user");
+
+        }
     }
-}
 
     return (
         <div className="flex h-screen">
@@ -81,7 +97,7 @@ const handleClick = async () => {
                             console.log(e.target.value);
 
                             setEmail(e.target.value)
-                        }}/>
+                        }} />
                     </div>
 
                     <div className="mt-5 grid w-full max-w-sm items-center gap-1.5">
@@ -104,7 +120,7 @@ const handleClick = async () => {
             {/* Right Side */}
             <div className="w-1/2 bg-rose-100 flex justify-center flex-col">
                 <div className="flex items-center flex-col">
-                {quote && (
+                    {quote && (
                         <div className="text-3xl font-bold tracking-tight lg:text-4xl m-4 text-center">
                             {/* <p>Hi</p> */}
                             <p>"{quote.quote}"</p>

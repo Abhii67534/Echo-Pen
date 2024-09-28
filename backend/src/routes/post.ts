@@ -160,7 +160,34 @@ postRouter.get('/bulk', async (c) => {
             },
         },
     });
-    console.log(allBlogs);
 
-    return c.json(allBlogs);
+    console.log(allBlogs); // This will include the likes count automatically
+    return c.json(allBlogs); // No need to map the likes again
 });
+
+
+
+postRouter.post('/blog/:id/like', async (c) => {
+    const postId = c.req.param('id'); // Get post ID from the URL
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    try {
+        // Increment the likes by 1 for the specified post
+        const updatedPost = await prisma.post.update({
+            where: { id: postId },
+            data: {
+                likes: {
+                    increment: 1,
+                },
+            },
+        });
+
+        return c.json(updatedPost); // Return the updated post
+    } catch (error) {
+        console.error("Error liking post:", error);
+        return c.json({ error: "An error occurred while liking the post." }, 500);
+    }
+});
+

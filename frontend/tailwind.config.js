@@ -10,6 +10,7 @@ export default {
 		fontFamily: {
 			headland: ['"Headland One"', 'serif'], 
 			'im-fell-english': ['"IM Fell English"', 'serif'],
+			newsreader: ['"Newsreader"', 'serif'],
 		  },
   		borderRadius: {
   			lg: 'var(--radius)',

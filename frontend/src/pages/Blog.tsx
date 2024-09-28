@@ -3,10 +3,12 @@ import { BlogCard, BlogObject } from "./BlogCard"
 import axios from "axios"
 import { useRecoilState } from "recoil"
 import { blogs } from "@/recoil/atom"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 export const Blog = () => {
+  const navigate = useNavigate();
   const [blog, setBlog] = useRecoilState<Array<BlogObject>>(blogs);
   useEffect(() => {
     const storageToken = localStorage.getItem('token') || '';
@@ -15,16 +17,15 @@ export const Blog = () => {
       return
 
     }
-
     console.log(storageToken);
-    
+
 
     function capitalizeFirstLetter(str: string): string {
       if (!str) return '';
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
-  
+
 
     const fetchBlogs = async () => {
       const response = await axios.get("https://backend.abhisharma4950.workers.dev/post/bulk",
@@ -43,9 +44,18 @@ export const Blog = () => {
     }
     fetchBlogs();
   }, [])
+
+  const handleWrite = () => {
+    navigate("/blog-post")
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/signin');
+  }
   return (
-    <div >
-      <nav className=" pl-10 text-black pt-4 pr-4 pr-0 pl-0 flex justify-between border-b-2 border-gray-100 pb-3 mb-20">
+    <div className="bg-rose-50 h-full">
+      <nav className=" pl-10 text-black pt-4 pr-4 pr-0 pl-0 flex justify-between border-b-2 border-gray-500 pb-3 mb-20">
         <div className="container flex justify-between items-center">
           <div className=" flex flex-row ">
             <div className="text-2xl font-bold font-im-fell-english text-4xl">
@@ -57,9 +67,15 @@ export const Blog = () => {
             </div>
           </div>
           <div className="flex items-center"> {/* Use items-center to align vertically */}
-            <img className="w-[25px] h-[25px]" src="./src/images/write.png" alt="Write Icon" />
-            <div className="text-gray-500 text-md ml-2">Write</div>
+
+            {/* <Link className="pl-1" to="/blog-post">Write</Link> */}
+            <Button className="rounded-full ml-10" onClick={handleWrite}>
+              <img className="w-[15px] h-[15px] mr-2" src="./src/images/pen.png" alt="Write Icon" />
+              Write</Button>
+            <Button className="rounded-full ml-10" onClick={handleLogout}>Logout</Button>
           </div>
+
+
         </div>
       </nav>
 
@@ -73,6 +89,7 @@ export const Blog = () => {
               content={blogPost.content}
               avatar={blogPost.avatar}
               author={blogPost.author}
+              likes ={blogPost.likes}
             />
           ))
         ) : (

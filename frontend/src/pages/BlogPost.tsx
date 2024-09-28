@@ -59,7 +59,7 @@ export const BlogPost = () => {
     };
 
     return (
-        <>
+        <div className="bg-rose-50 h-screen">
             {/***************  NAVBAR ****************** */}
             <nav className="text-black p-4">
                 <div className="container mx-auto flex justify-between items-center">
@@ -79,14 +79,14 @@ export const BlogPost = () => {
                         <input
                             type="text"
                             placeholder="Title"
-                            className="text-5xl w-full h-full text-center font-headland"
+                            className="bg-rose-50 text-5xl w-full h-full text-center font-headland"
                             onChange={(e) => (setTitle(e.target.value))}
                         />
                     </div>
-                    <div className="h-auto border-b-2">
+                    <div className="h-auto border-b-2 ">
                         <textarea
                             placeholder="Tell us your story..."
-                            className="text-xl w-full h-full text-center font-headland resize-none pt-4"
+                            className="bg-rose-50 text-xl w-full h-full text-center font-headland resize-none pt-4"
                             rows={2}
                             onChange={(e) => (setDescription(e.target.value))}
                         />
@@ -99,6 +99,6 @@ export const BlogPost = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
