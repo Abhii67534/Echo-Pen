@@ -10,18 +10,32 @@ const app = new Hono<{
   };
 }>();
 
-// Configure CORS
+// Define allowed origins
+const allowedOrigins = [
+  'https://echo-pen-v1yi.vercel.app',
+  'https://echo-pen-v1yi-3ko5sz3k6-abhii67534s-projects.vercel.app',
+  'http://localhost:5173'
+
+];
+
+// Function to determine if the origin is allowed
+const corsOrigin = (origin: string) => {
+  return allowedOrigins.includes(origin) ? origin : null; // Return origin if allowed, else null
+};
+
+// Configure CORS for user routes
 app.use('/user/*', cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend URL
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the allowed methods
-  allowHeaders: ['Content-Type', 'Authorization'], // Specify the allowed headers
-  credentials: true // If you need to send credentials (e.g., cookies)
+  origin: corsOrigin,
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // Allow credentials (e.g., cookies)
 }));
 
+// Configure CORS for post routes
 app.use('/post/*', cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend URL
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the allowed methods
-  allowHeaders: ['Content-Type', 'Authorization'], // Specify the allowed headers
+  origin: corsOrigin,
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowHeaders: ['Content-Type', 'Authorization'],
   credentials: true // Allow credentials (e.g., cookies)
 }));
 

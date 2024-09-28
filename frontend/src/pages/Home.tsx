@@ -26,6 +26,10 @@ export const Home = () => {
     const handleDashboard =()=>{
         navigate("/blog")
     }
+
+    const handleLogout =()=>{
+        navigate("/")
+    }
     return (
         <div className='bg-rose-50 h-screen'>
             <nav className="pl-10 text-black pt-4 pr-4 border-b-2 border-gray-100 pb-3 mb-5">
@@ -38,9 +42,16 @@ export const Home = () => {
                     </div>
                     <div className="flex items-center">
                         {token ? (
+                            <>
                             <Button className="rounded-full" onClick={handleDashboard}>
                                 Dashboard
                             </Button>
+                            <Button className="ml-10 rounded-full" onClick={handleLogout}>
+                                Logout
+                            </Button>
+                            </>
+                            
+                            
                         ) : (
                             <>
                                 <Button className="rounded-full" onClick={handleSignin}>
