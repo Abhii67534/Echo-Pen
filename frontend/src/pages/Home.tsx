@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import React, { useEffect, useState } from 'react'; // Import React
+import { useEffect, useState } from 'react'; // Import React
 import { Link, useNavigate } from 'react-router-dom';
 
 export const Home = () => {

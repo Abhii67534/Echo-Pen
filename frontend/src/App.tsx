@@ -5,7 +5,6 @@ import { Signup } from './pages/Signup'
 import { Home } from './pages/Home'
 import { RecoilRoot } from 'recoil'
 import { BlogPost } from './pages/BlogPost'
-import Navbar from './components/ui/navbar'
 
 
 function App() {
