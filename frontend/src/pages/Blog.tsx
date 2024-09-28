@@ -67,7 +67,7 @@ export const Blog = () => {
           </div>
           <div className="flex items-center">
             <Button className="rounded-full ml-10" onClick={handleWrite}>
-              <img className="w-[15px] h-[15px] mr-2" src="./src/images/pen.png" alt="Write Icon" />
+              <img className="w-[15px] h-[15px] mr-2" src="/images/pen.png" alt="Write Icon" />
               Write
             </Button>
             <Button className="rounded-full ml-10" onClick={handleLogout}>Logout</Button>

@@ -66,7 +66,7 @@ export const Home = () => {
                 </div>
 
                 <div className='w-1/2 flex flex-col justify-end items-end p-5'>
-                    <img src="./src/images/man.png" alt="Man Illustration" />
+                    <img src="/images/man.png" alt="Man Illustration" />
                 </div>
             </div>
         </div>
