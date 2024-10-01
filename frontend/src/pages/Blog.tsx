@@ -123,7 +123,7 @@ export const Blog = () => {
               Grow your readership
             </div>
             <div className="flex justify-center font-medium">
-            <Button className="  rounded-full">Start Writing</Button>
+            <Button className="  rounded-full" onClick={handleWrite}>Start Writing </Button>
             </div>
             
           </div>
