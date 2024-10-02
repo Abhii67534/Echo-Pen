@@ -1,7 +1,7 @@
-import { Hono } from 'hono';
-import { userRouter } from './routes/user';
-import { postRouter } from './routes/post';
-import { cors } from 'hono/cors';
+import { Hono } from "hono";
+import { userRouter } from "./routes/user";
+import { postRouter } from "./routes/post";
+import { cors } from "hono/cors";
 
 const app = new Hono<{
   Bindings: {
@@ -12,10 +12,11 @@ const app = new Hono<{
 
 // Define allowed origins
 const allowedOrigins = [
-  'https://echo-pen-v1yi.vercel.app',
-  'https://echo-pen-v1yi-3ko5sz3k6-abhii67534s-projects.vercel.app',
-  'http://localhost:5173'
-
+  "https://echo-pen-v1yi.vercel.app",
+  "https://echo-pen-v1yi-3ko5sz3k6-abhii67534s-projects.vercel.app",
+  "http://localhost:5173",
+  "https://echo-pen.netlify.app",
+  "https://echo-pen-two.vercel.app"
 ];
 
 // Function to determine if the origin is allowed
@@ -24,20 +25,26 @@ const corsOrigin = (origin: string) => {
 };
 
 // Configure CORS for user routes
-app.use('/user/*', cors({
-  origin: corsOrigin,
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowHeaders: ['Content-Type', 'Authorization'],
-  credentials: true // Allow credentials (e.g., cookies)
-}));
+app.use(
+  "/user/*",
+  cors({
+    origin: corsOrigin,
+    allowMethods: ["GET", "POST", "PUT", "DELETE"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // Allow credentials (e.g., cookies)
+  })
+);
 
 // Configure CORS for post routes
-app.use('/post/*', cors({
-  origin: corsOrigin,
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowHeaders: ['Content-Type', 'Authorization'],
-  credentials: true // Allow credentials (e.g., cookies)
-}));
+app.use(
+  "/post/*",
+  cors({
+    origin: corsOrigin,
+    allowMethods: ["GET", "POST", "PUT", "DELETE"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // Allow credentials (e.g., cookies)
+  })
+);
 
 // Setup routes
 app.route("/user", userRouter);
