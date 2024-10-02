@@ -12,11 +12,10 @@ const app = new Hono<{
 
 // Define allowed origins
 const allowedOrigins = [
-  "https://echo-pen-v1yi.vercel.app",
-  "https://echo-pen-v1yi-3ko5sz3k6-abhii67534s-projects.vercel.app",
-  "http://localhost:5173",
   "https://echo-pen-two.vercel.app",
-  "https://echo-pen-git-main-abhii67534s-projects.vercel.app"
+  "https://echo-pen-git-main-abhii67534s-projects.vercel.app",
+  "echo-pen-git-main-abhii67534s-projects.vercel.app"
+
 ];
 
 // Function to determine if the origin is allowed
