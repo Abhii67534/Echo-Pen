@@ -3,8 +3,6 @@ import { BlogObject } from '@/pages/BlogCard';
 import { Quote } from '@/pages/Signin';
 import { atom } from 'recoil';
 
-
-
 export const quoteState = atom<Quote | null>({
     key: "quoteState",
     default: null
