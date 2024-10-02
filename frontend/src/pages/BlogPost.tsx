@@ -16,24 +16,21 @@ export const BlogPost = () => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]); // Set the first file if available
+            setFile(e.target.files[0]); 
         } else {
-            setFile(null); // Clear the file state if no file is selected
+            setFile(null); 
         }
     };
-    // useEffect to handle setting the token after the component renders
-    useEffect(() => {
 
+
+    useEffect(() => {
         const storageToken = localStorage.getItem('token') || '';
         if (storageToken === '') {
             console.log("No token found. Please sign in.");
             return;
         }
-        setToken(storageToken);  // Update the token state inside useEffect
+        setToken(storageToken);
     }, [setToken]);
-
-
-
 
     const handleClick = async () => {
         const formData = new FormData();
@@ -43,23 +40,28 @@ export const BlogPost = () => {
         if (file) {
             formData.append('avatar', file);
         }
-        const response = await axios.post("https://backend.abhisharma4950.workers.dev/post/blog", formData, {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'multipart/form-data'
-            }
-        });
 
-        if (response.status === 200) {
-            console.log("Blog added");
-            navigate('/blog');
-        } else {
-            console.log("Error while adding blog post");
+        try {
+            const response = await axios.post("https://backend.abhisharma4950.workers.dev/post/blog", formData, {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                console.log("Blog added");
+                navigate('/blog');
+            } else {
+                console.log("Error while adding blog post");
+            }
+        } catch (error) {
+            console.error("Error submitting blog post:", error);
         }
     };
 
     return (
-        <div className="bg-rose-50 h-screen">
+        <div className="bg-rose-50 min-h-screen"> 
             {/***************  NAVBAR ****************** */}
             <nav className="text-black p-4">
                 <div className="container mx-auto flex justify-between items-center">
@@ -67,14 +69,14 @@ export const BlogPost = () => {
                         <Link to="/">Echo-Pen</Link>
                     </div>
                     <div className="space-x-4">
-                        <Button className='rounded-full' variant="ghost" onClick={handleClick} width="100px">Publish</Button>
+                        <Button className='rounded-full' variant="ghost" onClick={handleClick}>Publish</Button>
                     </div>
                 </div>
             </nav>
 
             {/* TITLE AND DESCRIPTION */}
             <div className="pt-5 flex justify-center">
-                <div className="border-gray-300 w-[500px] flex flex-col justify-center">
+                <div className="border-gray-300 w-full max-w-lg flex flex-col justify-center p-4 mx-4"> 
                     <div className="h-[100px] border-y-2">
                         <input
                             type="text"
@@ -92,7 +94,7 @@ export const BlogPost = () => {
                         />
                     </div>
 
-                    {/* Center the Choose Image section without increasing input width */}
+                   
                     <div className="mt-10 flex flex-col items-center">
                         <Label htmlFor="picture" className="mb-2">Image for your Blog</Label>
                         <Input id="picture" type="file" className="w-auto" onChange={handleFileChange} />
@@ -101,4 +103,4 @@ export const BlogPost = () => {
             </div>
         </div>
     );
-}
+};

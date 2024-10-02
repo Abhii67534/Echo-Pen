@@ -65,27 +65,23 @@ export const Home = () => {
             </nav>
 
             {/* Main Content */}
-            <div className="flex flex-col lg:flex-row flex-grow justify-around items-center px-6 lg:px-10 space-y-8 lg:space-y-0" style={{ height: 'calc(100vh - 5rem)' }}>
-                {/* Left Section (Text) */}
-                <div className="flex flex-col items-center mt-20  ">
-                    {/* Adjusted font sizes for responsive scaling */}
-                    <div className="font-medium font-im-fell-english text-6xl sm:text-7xl md:text-8xl" >
+            <div className="flex flex-col lg:flex-row flex-grow justify-center items-center px-6 lg:px-10" style={{ height: 'calc(100vh - 5rem)' }}>
+                <div className="flex flex-col items-center justify-center h-full" style={{ flex: '1 1 50%' }}>
+                    <div className="font-medium font-im-fell-english text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center">
                         Human
                     </div>
-                    <div className="font-medium font-im-fell-english text-6xl sm:text-7xl md:text-8xl">
+                    <div className="font-medium font-im-fell-english text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center">
                         stories & ideas
                     </div>
                 </div>
 
-                {/* Right Section (Image) */}
-                <div className="flex justify-center lg:justify-end items-center lg:items-end h-full lg:h-screen">
-    <img
-        src="/images/man.png"
-        alt="Man Illustration"
-        className="w-[500px] h-[400px] md:w-[600px] md:h-[500px] lg:w-[500px] lg:h-[400px]"
-    />
-</div>
-
+                <div className="flex justify-center items-end h-full lg:h-auto" style={{ flex: '1 1 50%' }}>
+                    <img
+                        src="/images/man.png"
+                        alt="Man Illustration"
+                        className="w-full h-full object-cover"  // Ensure the image covers the entire area
+                    />
+                </div>
             </div>
         </div>
     );
