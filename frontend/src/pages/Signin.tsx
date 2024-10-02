@@ -79,19 +79,19 @@ export const Signin = () => {
     }
 
     return (
-        <div className="flex h-screen">
+        <div className="md:flex md:h-screen mt-20 ml-10 mr-10 md:m-0">
             {/* Left Side */}
-            <div className="w-1/2 bg-white flex justify-center flex-col">
+            <div className="md:w-1/2 bg-white flex justify-center flex-col ">
                 <div className="flex items-center flex-col">
-                    <h2 className=" text-3xl font-extrabold tracking-tight lg:text-4xl mb-2">
+                    <h2 className="text-lg sm:text-2xl md:text-2xl lg:text-3xl tab:text-xl font-extrabold  mb-2">
                         Sign in to your account
                     </h2>
-                    <h3 className="">
+                    <h3 className="text-xs sm:text-sm md:text-sm lg:text-lg ">
                         Already have an account? <a href="/signup" className="text-blue-500">Signup</a>
                     </h3>
 
                     {/* Input username */}
-                    <div className="mt-10 grid w-full max-w-sm items-center gap-1.5">
+                    <div className="mt-10 grid w-full max-w-sm items-center gap-1.5 lg:w-[400px] md:w-[300px] sm:w-[300px] w-[200px]">
                         <Label htmlFor="email">Email</Label>
                         <Input type="username" placeholder="Enter your username" onChange={(e) => {
                             console.log(e.target.value);
@@ -100,7 +100,7 @@ export const Signin = () => {
                         }} />
                     </div>
 
-                    <div className="mt-5 grid w-full max-w-sm items-center gap-1.5">
+                    <div className="mt-5 grid w-full max-w-sm items-center gap-1.5 lg:w-[400px] md:w-[300px] sm:w-[300px] w-[200px]">
                         <Label htmlFor="email">Password</Label>
                         <Input type="password" placeholder="" onChange={(e) => {
 
@@ -108,8 +108,8 @@ export const Signin = () => {
                         }} />
                     </div>
 
-                    <div className="mt-5">
-                        <Button variant="ghost" width="200px" onClick={handleClick}>Sign In</Button>
+                    <div className="mt-5 ">
+                        <Button variant="ghost" className="lg:w-[150px] xs:w-[150px] xl:w-[200px]"   onClick={handleClick}>Sign In</Button>
                     </div>
 
 
@@ -118,13 +118,13 @@ export const Signin = () => {
             </div>
 
             {/* Right Side */}
-            <div className="w-1/2 bg-rose-100 flex justify-center flex-col">
-                <div className="flex items-center flex-col">
+            <div className="w-1/2 bg-rose-100 flex content-center flex-col  hidden md:block">
+                <div className="flex content-center justify-center flex-col"> 
                     {quote && (
-                        <div className="text-3xl font-bold tracking-tight lg:text-4xl m-4 text-center">
+                        <div className="text-3xl font-bold tracking-tight lg:text-3xl md:text-2xl sm:text-xl m-4 text-center">
                             {/* <p>Hi</p> */}
                             <p>"{quote.quote}"</p>
-                            <p className="mt-2 text-lg italic font-normal">— {quote.author}</p>
+                            <p className="mt-2 md:text-lg sm:text-md italic font-normal">— {quote.author}</p>
                         </div>
                     )}
 
