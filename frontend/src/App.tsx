@@ -1,5 +1,4 @@
-
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Signin } from "./pages/Signin";
 import { Blog } from "./pages/Blog";
 import { Signup } from "./pages/Signup";
@@ -7,30 +6,17 @@ import { Home } from "./pages/Home";
 import { BlogPost } from "./pages/BlogPost";
 import "./index.css";
 
-// Define the router using createBrowserRouter
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    path: "/signin",
-    element: <Signin />,
-  },
-  {
-    path: "/blog",
-    element: <Blog />,
-  },
-  {
-    path: "/blog-post",
-    element: <BlogPost />,
-  },
-]);
-
+// Refactored App component using BrowserRouter, Routes, and Route
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog-post" element={<BlogPost />} />
+      </Routes>
+    </Router>
+  );
 }
