@@ -1,12 +1,6 @@
+
 {
-    "rewrites": [
-      { "source": "/signup", "destination": "/signup" },
-      { "source": "/signin", "destination": "/signin" },
-      { "source": "/blog", "destination": "/blog" },
-      { "source": "/blog-post", "destination": "/blog-post" },
-      { "source": "/", "destination": "/" }
-    ],
-    "redirects": [],
-    "trailingSlash": false
-  }
-  
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
