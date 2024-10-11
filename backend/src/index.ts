@@ -11,7 +11,7 @@ const app = new Hono<{
 }>();
 
 // Define allowed origins
-const allowedOrigins = ["https://echo-pen-three.vercel.app","https://echo-pen.netlify.app"];
+const allowedOrigins = ["https://echo-pen.netlify.app"];
 
 // Function to determine if the origin is allowed
 const corsOrigin = (origin: string) => {
