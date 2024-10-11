@@ -2,7 +2,6 @@ import { Hono } from 'hono';
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 import { decode, sign, verify } from 'hono/jwt';
-import axios from 'axios';
 
 export const userRouter = new Hono<{
   Bindings: {
@@ -70,12 +69,15 @@ userRouter.post('/signin', async (c) => {
   }
   if (user) {
     if (body.password != user.password) {
-      return c.json({ msg: "Incorrect password" })
+      return c.json({ error: "Incorrect password" },401)
     }
     const token = await sign({ id: user.id }, c.env.JWT_SECRET)
+    console.log(token);
+    
     return c.json({
       msg: "Signin successfull",
-      token: token
+      token: token,
+      id:user.id
     })
   }
 })

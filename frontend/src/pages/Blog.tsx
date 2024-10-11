@@ -6,12 +6,13 @@ import { blogs } from "@/recoil/atom";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton"; // Import the Skeleton component
+import { Skeleton } from "@/components/ui/skeleton"; 
 
 export const Blog = () => {
   const navigate = useNavigate();
   const [blog, setBlog] = useRecoilState<Array<BlogObject>>(blogs);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
     const storageToken = localStorage.getItem('token') || '';
@@ -31,7 +32,7 @@ export const Blog = () => {
 
         if (response.status === 200) {
           console.log(response.data);
-          setBlog(response.data);
+          setBlog(response.data); 
         }
       } catch (error) {
         console.error("Error fetching blogs:", error);
@@ -52,10 +53,17 @@ export const Blog = () => {
     navigate('/');
   };
 
+  const filteredBlogs = search
+    ? blog.filter((blogPost) =>
+        blogPost.title.toLowerCase().includes(search.toLowerCase()) ||
+        blogPost.content.toLowerCase().includes(search.toLowerCase())
+      )
+    : blog;
+
   return (
     <div className="bg-rose-50 h-screen w-screen overflow-x-hidden">
-      <div className=" tab:pl-10 xs:pt-2 xs:pr-4 tab:pt-4 xs:pl-5 border-b-2 border-gray-500 pb-5 ">
-        <nav className=" flex justify-center ">
+      <div className="tab:pl-10 xs:pt-2 xs:pr-4 tab:pt-4 xs:pl-5 border-b-2 border-gray-500 pb-5 ">
+        <nav className="flex justify-center">
           <div className="container flex justify-between items-center">
             <div className="flex flex-row">
               <div className="xs:text-lg tab:text-2xl font-bold font-im-fell-english ">
@@ -63,7 +71,11 @@ export const Blog = () => {
               </div>
 
               <div className="ml-10 hidden sm:block">
-                <Input className="rounded-full" placeholder="Search" />
+                <Input
+                  className="rounded-full"
+                  placeholder="Search"
+                  onChange={(e) => setSearch(e.target.value)}
+                />
               </div>
             </div>
             <div className="flex items-center">
@@ -79,8 +91,7 @@ export const Blog = () => {
         </nav>
       </div>
 
-
-      <div className="flex flex-col md:flex-row h-full "> 
+      <div className="flex flex-col md:flex-row h-full">
         {/* LEFT SIDE */}
         <div className="flex flex-col md:w-3/4 md:pt-5 items-center">
           {loading ? (
@@ -93,8 +104,8 @@ export const Blog = () => {
               <Skeleton className="h-24 w-3/4 mb-4" />
               <Skeleton className="h-24 w-3/4 mb-4" />
             </>
-          ) : blog.length > 0 ? (
-            blog.map((blogPost) => (
+          ) : filteredBlogs.length > 0 ? (
+            filteredBlogs.map((blogPost) => (
               <BlogCard
                 key={blogPost.id}
                 id={blogPost.id}
@@ -104,11 +115,13 @@ export const Blog = () => {
                 author={blogPost.author}
                 likes={blogPost.likes}
                 date={blogPost.date}
+                authorId={blogPost.authorId}
               />
             ))
           ) : (
             <div className="text-4xl text-red-600 font-im-fell-english mt-20">
-              No blogs found.</div>
+              No blogs found.
+            </div>
           )}
         </div>
 

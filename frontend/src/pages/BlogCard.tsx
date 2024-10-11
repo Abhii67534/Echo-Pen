@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface BlogObject {
   author: {
     name: string;
     avatar: string;
+    id: string;
   };
   id: string;
   title: string;
@@ -13,6 +14,7 @@ export interface BlogObject {
   avatar: string;
   likes: number;
   date: string;
+  authorId:string
 }
 
 export const BlogCard = ({
@@ -23,8 +25,20 @@ export const BlogCard = ({
   likes,
   date,
   author,
+  authorId
 }: BlogObject) => {
   const [like, setLike] = useState(likes);
+  const [userId, setUserId] = useState<string | null>("");
+
+    useEffect(()=>{
+        const LoginuserId = localStorage.getItem("LoggedInUserId");
+        console.log("Loggedinuserid ",LoginuserId);
+        console.log(authorId);
+        
+        setUserId(LoginuserId);
+    },[])
+
+
 
   function capitalizeFirstLetter(str: string): string {
     if (!str) return "";
@@ -47,16 +61,16 @@ export const BlogCard = ({
       const response = await axios.delete(
         `https://backend.abhisharma4950.workers.dev/post/blog/${blogId}`,
         {
-            headers: {
-              Authorization: token,
-            },
-          }
+          headers: {
+            Authorization: token,
+          },
+        }
       );
 
       if (response.status === 200) {
         console.log("Blog post deleted successfully.");
       }
-      window.location.href=("/blog")
+      window.location.href = "/blog";
     } catch (error) {
       console.error("Error deleting the blog post:", error);
     }
@@ -136,10 +150,13 @@ export const BlogCard = ({
               <div className="likes text-xs ml-2">{like}</div>
             </div>
           </div>
-
-          <div className="mt-5">
-            <Button onClick={handleDelete}>Delete Post </Button>
-          </div>
+          {userId === authorId ? (
+            <div className="mt-5">
+              <Button onClick={handleDelete}>Delete Post </Button>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
 
         <div className="w-full md:w-1/4 mt-4 md:mt-0">

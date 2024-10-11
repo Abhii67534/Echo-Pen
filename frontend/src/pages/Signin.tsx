@@ -67,14 +67,29 @@ export const Signin = () => {
         setRet(true); // Set return to true indicating success
 
         const token = response.data.token;
+        const LoggedInUserId = response.data.id;
         localStorage.setItem("token", token);
+        console.log(token);
+        
+        localStorage.setItem("LoggedInUserId",LoggedInUserId)
         navigate("/blog"); // Redirect to the blog page
       }
     } catch (err) {
-      
-      setError("Error while signing in, please check your credentials.");
-      setRet(false); 
-      console.error("Sign in error:", err); 
+      // Handle error response
+      if (axios.isAxiosError(err) && err.response) {
+        // You can check the status code here if needed
+        if (err.response.status === 404) {
+          setError("User not found. Please check your email.");
+        } else if (err.response.status === 401) {
+          setError("Incorrect password. Please try again.");
+        } else {
+          setError("Error while signing in. Please try again later.");
+        }
+      } else {
+        setError("Network error. Please check your connection.");
+      }
+      setRet(false);
+      console.error("Sign in error:", err);
     }
   };
 
