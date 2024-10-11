@@ -3,8 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   emailState,
+  errorState,
   passwordState,
   quoteState,
+  retState,
   usernameState,
 } from "@/recoil/atom";
 import axios from "axios";
@@ -24,6 +26,8 @@ export const Signup = () => {
   const [username, setUsername] = useRecoilState(usernameState);
   const [password, setPassword] = useRecoilState(passwordState);
   const [file, setFile] = useState<File | null>(null);
+  const [err, setError] = useRecoilState(errorState);
+  const [ret, setRet] = useRecoilState(retState);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -54,15 +58,21 @@ export const Signup = () => {
   }, []);
 
   const handleClick = async () => {
-    const formData = new FormData();
-
-    formData.append("email", email);
-    formData.append("name", username);
-    formData.append("password", password);
-    if (file) {
-      formData.append("avatar", file);
-    }
     try {
+      const formData = new FormData();
+      if (!email || !username || !password || !file) {
+        setRet(false);
+        setError("Error while creating account. Please check your credentials");
+        console.error("Error during creating account. Please check your credentials");
+        return;
+      }
+
+      formData.append("email", email);
+      formData.append("name", username);
+      formData.append("password", password);
+      if (file) {
+        formData.append("avatar", file);
+      }
       const response = await axios.post(
         "https://backend.abhisharma4950.workers.dev/user/signup",
         formData,
@@ -72,15 +82,15 @@ export const Signup = () => {
           },
         }
       );
-
       if (response.status === 200) {
         console.log("User added to db");
         localStorage.setItem("token", response.data.token);
         navigate("/signin");
-      } else {
-        console.log("Error while signing up user");
+        setRet(true);
       }
     } catch (error) {
+      setRet(false);
+      setError("Error during creating account. Please check your credentials");
       console.error("Error during signup:", error);
     }
   };
@@ -99,7 +109,7 @@ export const Signup = () => {
               Login
             </a>
           </h3>
-
+          {ret ? <></> : <div className="text-red-500">{err}</div>}
           {/* Input fields */}
           <div className="xs:w-[200px] tab:w-[250px] sm:w-[300px] xl:w-[350px] mt-10 grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="username">Username</Label>

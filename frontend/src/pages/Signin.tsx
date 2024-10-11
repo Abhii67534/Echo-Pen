@@ -1,7 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { emailState, passwordState, quoteState } from "@/recoil/atom";
+import {
+  emailState,
+  errorState,
+  passwordState,
+  quoteState,
+  retState,
+} from "@/recoil/atom";
 import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +23,8 @@ export const Signin = () => {
   const [quote, setQuote] = useRecoilState<Quote | null>(quoteState);
   const [email, setEmail] = useRecoilState(emailState);
   const [password, setPassword] = useRecoilState(passwordState);
+  const [err, setError] = useRecoilState(errorState);
+  const [ret, setRet] = useRecoilState(retState);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,37 +53,31 @@ export const Signin = () => {
   };
 
   const handleClick = async () => {
-    const response = await axios.post(
-      "https://backend.abhisharma4950.workers.dev/user/signin",
-      formData,
-      {
-        withCredentials: true,
+    try {
+      const response = await axios.post(
+        "https://backend.abhisharma4950.workers.dev/user/signin",
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("API Response:", response.data);
+        setRet(true); // Set return to true indicating success
+
+        const token = response.data.token;
+        localStorage.setItem("token", token);
+        navigate("/blog"); // Redirect to the blog page
       }
-    );
-    
-    if (response.status === 200) {
-      console.log("API Response:", response.data);
-
-      console.log("User signed in");
-
-      // Get the token from the response data
-      const token = response.data.token;
-
-      console.log("Before setting token:", localStorage.getItem("token"));
-
-      // Store the token in localStorage
-      localStorage.setItem("token", token);
-
-      console.log("After setting token:", localStorage.getItem("token"));
-
-      // console.log(token);
-
-      // Redirect to the blog page
-      navigate("/blog");
-    } else {
-      console.log("Error while signin user");
+    } catch (err) {
+      
+      setError("Error while signing in, please check your credentials.");
+      setRet(false); 
+      console.error("Sign in error:", err); 
     }
   };
+
 
   return (
     <div className="md:flex md:h-screen mt-20 ml-10 mr-10 md:m-0">
@@ -91,6 +93,8 @@ export const Signin = () => {
               Signup
             </a>
           </h3>
+
+          {ret ? <></> : <div className="text-red-500">{err}</div>}
 
           {/* Input username */}
           <div className="mt-10 grid w-full max-w-sm items-center gap-1.5 lg:w-[400px] md:w-[300px] sm:w-[300px] w-[200px]">
