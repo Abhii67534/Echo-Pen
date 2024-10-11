@@ -27,7 +27,7 @@ export const Home = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/";
+    navigate("/blog")
   };
 
   return (
