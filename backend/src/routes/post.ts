@@ -194,3 +194,25 @@ postRouter.post('/blog/:id/like', async (c) => {
     }
 });
 
+postRouter.delete("/blog/:id",async(c)=>{
+    console.log("Reached here");
+    
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    const postId = c.req.param("id");
+
+    try{
+        const deletePost = await prisma.post.delete({
+            where:{id:postId}
+        })
+        console.log("Blog deleted");
+       return c.json(deletePost);
+        
+    }catch(error){
+        console.error("Blog delete err:", error)
+    }
+    
+
+})
+

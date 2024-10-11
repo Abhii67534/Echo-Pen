@@ -53,7 +53,7 @@ export const Blog = () => {
   };
 
   return (
-    <div className="bg-rose-50 h-screen w-screen overflow-x-hidden"> {/* Prevent horizontal overflow */}
+    <div className="bg-rose-50 h-screen w-screen overflow-x-hidden">
       <div className=" tab:pl-10 xs:pt-2 xs:pr-4 tab:pt-4 xs:pl-5 border-b-2 border-gray-500 pb-5 ">
         <nav className=" flex justify-center ">
           <div className="container flex justify-between items-center">
@@ -107,7 +107,8 @@ export const Blog = () => {
               />
             ))
           ) : (
-            <p>No blogs found.</p>
+            <div className="text-4xl text-red-600 font-im-fell-english mt-20">
+              No blogs found.</div>
           )}
         </div>
 
