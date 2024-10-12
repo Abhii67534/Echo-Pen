@@ -13,6 +13,7 @@ export const Blog = () => {
   const [blog, setBlog] = useRecoilState<Array<BlogObject>>(blogs);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState<string>("");
+  const [randomAuthors, setRandomAuthors] = useState<string[]>([]);
 
   useEffect(() => {
     const storageToken = localStorage.getItem('token') || '';
@@ -21,6 +22,17 @@ export const Blog = () => {
       return;
     }
 
+   
+    const getRandomAuthors = (authors: string[], count: number): string[] => {
+      if (authors.length <= count) return authors; // Return all if less than count
+      const shuffled = authors.sort(() => 0.5 - Math.random()); // Shuffle the authors
+      return shuffled.slice(0, count); // Return the first `count` authors
+    };
+    function capitalizeFirstLetter(str: string): string {
+      if (!str) return "";
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+  
     const fetchBlogs = async () => {
       try {
         const response = await axios.get("https://backend.abhisharma4950.workers.dev/post/bulk", {
@@ -33,7 +45,24 @@ export const Blog = () => {
         if (response.status === 200) {
           console.log(response.data);
           setBlog(response.data); 
-        }
+      
+          const authors = response.data.map((post: BlogObject) => capitalizeFirstLetter(post.author.name));
+          const uniqueAuthors: string[] = Array.from(new Set(authors));
+          
+          // Determine how many authors to select based on the length of response.data
+          let selectedAuthors: string[] = [];
+          if (response.data.length > 0 && response.data.length <= 3) {
+              selectedAuthors = getRandomAuthors(uniqueAuthors, 1); // Pick 1 author
+          } else if (response.data.length > 3) {
+              selectedAuthors = getRandomAuthors(uniqueAuthors, 3); // Pick 3 authors
+          }
+      
+          // Only update state if there are authors selected
+          if (selectedAuthors.length > 0) {
+              setRandomAuthors(selectedAuthors);
+          }
+      }
+      
       } catch (error) {
         console.error("Error fetching blogs:", error);
       } finally {
@@ -53,10 +82,16 @@ export const Blog = () => {
     navigate('/');
   };
 
+  const displayRandom =(author:string)=>{
+    setSearch(author);
+  }
+
+
   const filteredBlogs = search
     ? blog.filter((blogPost) =>
         blogPost.title.toLowerCase().includes(search.toLowerCase()) ||
-        blogPost.content.toLowerCase().includes(search.toLowerCase())
+        blogPost.content.toLowerCase().includes(search.toLowerCase())||
+        blogPost.author.name.toLowerCase().includes(search.toLowerCase())
       )
     : blog;
 
@@ -145,10 +180,10 @@ export const Blog = () => {
           </div>
 
           <div className="mt-10 ml-2">
-            <div className="font-bold mb-5">Staff Picks</div>
-            <Skeleton className="h-10 w-[300px] mb-6" />
-            <Skeleton className="h-10 w-[300px] mb-6" />
-            <Skeleton className="h-10 w-[300px] mb-6" />
+            <div className="font-bold mb-5">Liked By Others</div>
+            {randomAuthors.map((author) => (
+              <Button key={author} onClick={() => displayRandom(author)}>{author}</Button>
+            ))}
           </div>
         </div>
       </div>

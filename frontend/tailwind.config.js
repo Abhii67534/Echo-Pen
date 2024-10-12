@@ -15,6 +15,7 @@ export default {
 		  headland: ['"Headland One"', 'serif'], 
 		  'im-fell-english': ['"IM Fell English"', 'serif'],
 		  newsreader: ['"Newsreader"', 'serif'],
+		  anton:['"Anton SC"','sans-serif']
 		},
 		borderRadius: {
 		  lg: 'var(--radius)',
