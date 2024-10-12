@@ -134,14 +134,14 @@ export const BlogPost = () => {
             />
           </div>
 
-          <div className="mt-10 flex flex-col items-center">
-            <Label htmlFor="picture" className="mb-2">
+          <div className="mt-10 flex flex-col items-center ">
+            <Label htmlFor="picture" className="mb-2 ">
               Image for your Blog
             </Label>
             <Input
               id="picture"
               type="file"
-              className="w-auto"
+              className="w-auto xs:w-[250px] tab:[300px]"
               onChange={handleFileChange}
             />
           </div>
@@ -152,7 +152,7 @@ export const BlogPost = () => {
 
       <div className="flex items-center justify-center pb-5 ">
         <div className="mt-10 flex flex-col items-center w-[900px]">
-          <div className="font-im-fell-english text-4xl pb-5 border-b-2">
+          <div className="font-im-fell-english xs:text-xl tab:text-2xl sm:text-3xl md:text-text-4xl pb-5 border-b-2">
             Not Sure what to write? Ask Jimmy
           </div>
 
@@ -166,9 +166,9 @@ export const BlogPost = () => {
             Submit
           </Button>
           {groqResponse ? (
-            <div className="">
+            <div className="px-5">
                 <div className="mt-7 mb-3 text-xl">Jimmy's Response</div>
-              <div className="font-im-fell-english">
+              <div className="font-im-fell-english ">
                 {groqResponse}
               </div>
             </div>
