@@ -85,10 +85,10 @@ export const Home = () => {
               style={{ flex: "1 1 50%" }}
             >
               <div className="font-medium font-im-fell-english text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center">
-                Human
+                Life In
               </div>
               <div className="font-medium font-im-fell-english text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center">
-                stories & ideas
+                Little Moments
               </div>
             </div>
 
