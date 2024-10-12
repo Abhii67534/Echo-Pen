@@ -3,7 +3,7 @@ import { ChatGroq } from '@langchain/groq';
 const apiKey =import.meta.env.VITE_GROQ_API_KEY;
 
 if (!apiKey) {
-    console.error('REACT_APP_GROQ_API_KEY is not defined! Check your .env file.');
+    console.error('VITE_GROQ_API_KEY is not defined! Check your .env file.');
 }
 
 export const llm = new ChatGroq({
