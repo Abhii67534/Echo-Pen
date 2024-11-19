@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+import BlurIn from "@/components/ui/blur-in";
+import PulsatingButton from "@/components/ui/pulsating-button";
+import RetroGrid from "@/components/ui/retro-grid";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -9,6 +11,7 @@ export const Home = () => {
     const storageToken = localStorage.getItem("token");
     if (storageToken) {
       setToken(storageToken);
+      navigate("/blog");
     }
   }, []);
 
@@ -27,11 +30,12 @@ export const Home = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/blog")
+    navigate("/blog");
   };
 
   return (
     <div>
+
       {token ? (
         <>{(window.location.href = "/blog")}</>
       ) : (
@@ -48,27 +52,33 @@ export const Home = () => {
               <div className="flex items-center space-x-4 md:space-x-6">
                 {token ? (
                   <>
-                    <Button className="rounded-full" onClick={handleDashboard}>
+                    <PulsatingButton
+                      className="bg-black text-white rounded-full px-4 py-2"
+                      onClick={handleDashboard}
+                    >
                       Dashboard
-                    </Button>
-                    <Button
-                      className="rounded-full ml-2"
+                    </PulsatingButton>
+                    <PulsatingButton
+                      className="bg-black text-white rounded-full px-4 py-2 ml-2"
                       onClick={handleLogout}
                     >
                       Logout
-                    </Button>
+                    </PulsatingButton>
                   </>
                 ) : (
                   <>
-                    <Button className="rounded-full" onClick={handleSignin}>
+                    <PulsatingButton
+                      className="bg-black text-white rounded-full px-4 py-2"
+                      onClick={handleSignin}
+                    >
                       Signin
-                    </Button>
-                    <Button
-                      className="rounded-full ml-2"
+                    </PulsatingButton>
+                    <PulsatingButton
+                      className="bg-black text-white rounded-full px-4 py-2 ml-2"
                       onClick={handleSignup}
                     >
                       Create Account
-                    </Button>
+                    </PulsatingButton>
                   </>
                 )}
               </div>
@@ -84,12 +94,15 @@ export const Home = () => {
               className="flex flex-col items-center justify-center h-full"
               style={{ flex: "1 1 50%" }}
             >
-              <div className="font-medium font-im-fell-english text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center">
-                Life In
-              </div>
-              <div className="font-medium font-im-fell-english text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center">
-                Little Moments
-              </div>
+              <BlurIn
+                word="Life In"
+                className="font-medium font-im-fell-english text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center"
+              />
+
+              <BlurIn
+                word="Little Moments"
+                className="font-medium font-im-fell-english text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center"
+              />
             </div>
 
             <div
@@ -103,8 +116,10 @@ export const Home = () => {
               />
             </div>
           </div>
+          <RetroGrid />
         </div>
       )}
+       
     </div>
   );
 };

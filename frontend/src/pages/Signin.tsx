@@ -9,7 +9,7 @@ import {
   retState,
 } from "@/recoil/atom";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 
@@ -25,6 +25,9 @@ export const Signin = () => {
   const [password, setPassword] = useRecoilState(passwordState);
   const [err, setError] = useRecoilState(errorState);
   const [ret, setRet] = useRecoilState(retState);
+
+  // Loading state for the sign-in button
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const storageToken = localStorage.getItem("token") || "";
@@ -58,6 +61,7 @@ export const Signin = () => {
   };
 
   const handleClick = async () => {
+    setLoading(true); // Set loading state to true when request starts
     try {
       const response = await axios.post(
         "https://backend.abhisharma4950.workers.dev/user/signin",
@@ -95,9 +99,10 @@ export const Signin = () => {
       }
       setRet(false);
       console.error("Sign in error:", err);
+    } finally {
+      setLoading(false); // Set loading state to false when request finishes (success or failure)
     }
   };
-
 
   return (
     <div className="md:flex md:h-screen mt-20 ml-10 mr-10 md:m-0">
@@ -124,7 +129,6 @@ export const Signin = () => {
               placeholder="Enter your username"
               onChange={(e) => {
                 console.log(e.target.value);
-
                 setEmail(e.target.value);
               }}
             />
@@ -146,8 +150,13 @@ export const Signin = () => {
               variant="ghost"
               className="lg:w-[150px] xs:w-[150px] xl:w-[200px]"
               onClick={handleClick}
+              disabled={loading} // Disable button during loading
             >
-              Sign In
+              {loading ? (
+                <span>Loading...</span> // Text or spinner can be added here
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </div>
         </div>
@@ -158,7 +167,6 @@ export const Signin = () => {
         <div className="flex content-center justify-center flex-col">
           {quote && (
             <div className="text-3xl font-bold tracking-tight lg:text-3xl md:text-2xl sm:text-xl m-4 text-center">
-              {/* <p>Hi</p> */}
               <p>"{quote.quote}"</p>
               <p className="mt-2 md:text-lg sm:text-md italic font-normal">
                 — {quote.author}

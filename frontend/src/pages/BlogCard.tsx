@@ -14,7 +14,7 @@ export interface BlogObject {
   avatar: string;
   likes: number;
   date: string;
-  authorId:string
+  authorId: string;
 }
 
 export const BlogCard = ({
@@ -25,25 +25,44 @@ export const BlogCard = ({
   likes,
   date,
   author,
-  authorId
+  authorId,
 }: BlogObject) => {
-  const [like, setLike] = useState(likes);
-  const [userId, setUserId] = useState<string | null>("");
+  const [like, setLike] = useState(likes); // Track the number of likes
+  const [userId, setUserId] = useState<string | null>(null);
+  const [hasLiked, setHasLiked] = useState<boolean>(false); // Track if the user has liked the post
+  const [isProcessing, setIsProcessing] = useState(false); // Prevent duplicate requests
 
-    useEffect(()=>{
-        const LoginuserId = localStorage.getItem("LoggedInUserId");
-        console.log("Loggedinuserid ",LoginuserId);
-        console.log(authorId);
-        
-        setUserId(LoginuserId);
-    },[])
+  useEffect(() => {
+    const LoginuserId = localStorage.getItem("LoggedInUserId");
+    setUserId(LoginuserId);
 
+    // Check if the user has already liked the post from localStorage
+    const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]");
+    if (likedPosts.includes(id)) {
+      setHasLiked(true);
+    }
 
+    // Fetch the current like count and the user's like status from the backend
+    const fetchLikeStatus = async () => {
+      try {
+        const response = await axios.get(
+          `https://backend.abhisharma4950.workers.dev/post/blog/${id}/likes`,
+        );
+        const { likeCount, userLiked } = response.data; // Assuming backend returns { likeCount, userLiked }
+        setLike(likeCount);
+        setHasLiked(userLiked);
+      } catch (error) {
+        console.error("Error fetching like status from backend:", error);
+      }
+    };
 
-  function capitalizeFirstLetter(str: string): string {
+    fetchLikeStatus();
+  }, [id]);
+
+  const capitalizeFirstLetter = (str: string): string => {
     if (!str) return "";
     return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -79,27 +98,70 @@ export const BlogCard = ({
   const formattedDate = formatDate(date);
 
   const handleLikes = async () => {
+    if (isProcessing) return; // Prevent duplicate requests
+    setIsProcessing(true); // Set processing state to true
+
+    const token = localStorage.getItem("token");
+    const blogid = id;
+
     try {
-      const blogid = id;
-      console.log(blogid);
-      const token = localStorage.getItem("token");
+      if (hasLiked) {
+        // User is unliking the post
+        setHasLiked(false); // Mark the post as not liked
+        // Decrease like count
+        const response = await axios.post(
+          `https://backend.abhisharma4950.workers.dev/post/blog/${blogid}/unlike`,
+          {},
+          {
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-      setLike((prevLikes) => prevLikes + 1);
-
-      await axios.post(
-        `https://backend.abhisharma4950.workers.dev/post/blog/${blogid}/like`,
-        {},
-        {
-          headers: {
-            Authorization: token,
-            "Content-Type": "application/json",
-          },
+        if (response.status === 200) {
+          setLike((prevLikes) => prevLikes - 1); // Update like count after successful backend response
         }
-      );
+      } else {
+        // User is liking the post
+        setHasLiked(true); // Mark the post as liked
+        // Increase like count
+        const response = await axios.post(
+          `https://backend.abhisharma4950.workers.dev/post/blog/${blogid}/like`,
+          {},
+          {
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setLike((prevLikes) => prevLikes + 1); // Update like count after successful backend response
+        }
+      }
+
+      // Update localStorage after backend response
+      const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]");
+      if (hasLiked) {
+        // Remove post from liked posts if unliked
+        const updatedLikedPosts = likedPosts.filter((postId: string) => postId !== id);
+        localStorage.setItem("likedPosts", JSON.stringify(updatedLikedPosts));
+      } else {
+        // Add post to liked posts if liked
+        likedPosts.push(id);
+        localStorage.setItem("likedPosts", JSON.stringify(likedPosts));
+      }
     } catch (error) {
       console.error("Error updating likes:", error);
-      setLike((prevLikes) => prevLikes - 1);
+      // Revert the like/unlike if there was an error
+      setHasLiked(!hasLiked); // Revert the like/unlike status
+      setIsProcessing(false); // Reset processing state
     }
+
+    setIsProcessing(false); // Reset processing state after action is complete
   };
 
   return (
@@ -141,10 +203,11 @@ export const BlogCard = ({
 
             <div className="ml-3 flex items-center">
               <button onClick={handleLikes} aria-label="Like button">
+                {/* Conditionally render the like image based on hasLiked */}
                 <img
                   className="w-4 h-4 mb-2"
-                  src="/images/like.png"
-                  alt="Like"
+                  src={hasLiked ? "/images/liked.png" : "/images/not liked.png"} // Change the image
+                  alt={hasLiked ? "Liked" : "Not Liked"}
                 />
               </button>
               <div className="likes text-xs ml-2">{like}</div>

@@ -29,6 +29,9 @@ export const Signup = () => {
   const [err, setError] = useRecoilState(errorState);
   const [ret, setRet] = useRecoilState(retState);
 
+  // Loading state for the sign-up button
+  const [loading, setLoading] = useState(false);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFile(e.target.files[0]); // Set the first file if available
@@ -38,7 +41,6 @@ export const Signup = () => {
   };
 
   useEffect(() => {
-
     const storageToken = localStorage.getItem("token") || "";
     if (storageToken && storageToken !== "") {
       navigate("/blog");
@@ -54,7 +56,6 @@ export const Signup = () => {
             },
           }
         );
-        console.log(response.data[0]);
         setQuote(response.data[0]);
       } catch (error) {
         console.error("Error fetching the quote:", error);
@@ -64,12 +65,12 @@ export const Signup = () => {
   }, []);
 
   const handleClick = async () => {
+    setLoading(true); // Set loading state to true when the request starts
     try {
       const formData = new FormData();
       if (!email || !username || !password || !file) {
         setRet(false);
         setError("Error while creating account. Please check your credentials");
-        console.error("Error during creating account. Please check your credentials");
         return;
       }
 
@@ -79,6 +80,7 @@ export const Signup = () => {
       if (file) {
         formData.append("avatar", file);
       }
+
       const response = await axios.post(
         "https://backend.abhisharma4950.workers.dev/user/signup",
         formData,
@@ -88,8 +90,8 @@ export const Signup = () => {
           },
         }
       );
+
       if (response.status === 200) {
-        console.log("User added to db");
         localStorage.setItem("token", response.data.token);
         navigate("/signin");
         setRet(true);
@@ -98,6 +100,8 @@ export const Signup = () => {
       setRet(false);
       setError("Error during creating account. Please check your credentials");
       console.error("Error during signup:", error);
+    } finally {
+      setLoading(false); // Set loading state to false when the request finishes
     }
   };
 
@@ -116,6 +120,7 @@ export const Signup = () => {
             </a>
           </h3>
           {ret ? <></> : <div className="text-red-500">{err}</div>}
+
           {/* Input fields */}
           <div className="xs:w-[200px] tab:w-[250px] sm:w-[300px] xl:w-[350px] mt-10 grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="username">Username</Label>
@@ -152,13 +157,18 @@ export const Signup = () => {
             <Input id="picture" type="file" onChange={handleFileChange} />
           </div>
 
-          <div className="mt-5 ">
+          <div className="mt-5">
             <Button
               variant="ghost"
               className="xs:w-[100px] tab:w-[150px] xl:w-[200px]"
               onClick={handleClick}
+              disabled={loading} // Disable the button while loading
             >
-              Sign Up
+              {loading ? (
+                <span>Loading...</span> // You can replace this with a spinner or something else
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </div>
         </div>
