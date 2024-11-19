@@ -19,6 +19,7 @@ export const Blog = () => {
     const storageToken = localStorage.getItem("token") || "";
     if (storageToken === "") {
       console.log("No token found. Please sign in.");
+      navigate("/signin");
       return;
     }
 

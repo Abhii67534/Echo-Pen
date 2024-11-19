@@ -27,6 +27,11 @@ export const Signin = () => {
   const [ret, setRet] = useRecoilState(retState);
 
   useEffect(() => {
+    const storageToken = localStorage.getItem("token") || "";
+    if (storageToken && storageToken !== "") {
+      navigate("/blog");
+      return;
+    }
     const fetchData = async () => {
       try {
         const response = await axios.get(
